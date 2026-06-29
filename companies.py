@@ -31,8 +31,48 @@ COMPANIES = [
     {"name": "Reddit", "adapter": "greenhouse", "config": {"token": "reddit"}},
     {"name": "Figma", "adapter": "greenhouse", "config": {"token": "figma"}},
     {"name": "Brex", "adapter": "greenhouse", "config": {"token": "brex"}},
+    {"name": "Block", "adapter": "greenhouse", "config": {"token": "block"}},
+    {"name": "Asana", "adapter": "greenhouse", "config": {"token": "asana"}},
+    {"name": "Datadog", "adapter": "greenhouse", "config": {"token": "datadog"}},
+    {"name": "The Trade Desk", "adapter": "greenhouse",
+     "config": {"token": "thetradedesk"}},
+    {"name": "Lyft", "adapter": "greenhouse", "config": {"token": "lyft"}},
+    {"name": "Twitch", "adapter": "greenhouse", "config": {"token": "twitch"}},
+    {"name": "Discord", "adapter": "greenhouse", "config": {"token": "discord"}},
+    {"name": "Cloudflare", "adapter": "greenhouse",
+     "config": {"token": "cloudflare"}},
+    {"name": "DoorDash", "adapter": "greenhouse",
+     "config": {"token": "doordashusa"}},
+    {"name": "Coupang", "adapter": "greenhouse", "config": {"token": "coupang"}},
+    {"name": "Roblox", "adapter": "greenhouse", "config": {"token": "roblox"}},
+    {"name": "Affirm", "adapter": "greenhouse", "config": {"token": "affirm"}},
+    # Block = Square (same Greenhouse board after rebrand).
+
+    # --- Lever (verified live) ---
+    {"name": "Palantir", "adapter": "lever", "config": {"org": "palantir"}},
+    {"name": "Spotify", "adapter": "lever", "config": {"org": "spotify"}},
+
+    # --- Ashby (verified live) ---
+    {"name": "Notion", "adapter": "ashby", "config": {"org": "Notion"}},
+    {"name": "OpenAI", "adapter": "ashby", "config": {"org": "openai"}},
 
     # --- Workday (verified live) ---
+    {"name": "PayPal", "adapter": "workday",
+     "config": {"host": "paypal.wd1.myworkdayjobs.com",
+                "tenant": "paypal", "site": "jobs",
+                "search": "software engineer"}},
+    {"name": "Adobe", "adapter": "workday",
+     "config": {"host": "adobe.wd5.myworkdayjobs.com",
+                "tenant": "adobe", "site": "external_experienced",
+                "search": "software engineer"}},
+    {"name": "eBay", "adapter": "workday",
+     "config": {"host": "ebay.wd5.myworkdayjobs.com",
+                "tenant": "ebay", "site": "apply",
+                "search": "software engineer"}},
+    {"name": "Salesforce", "adapter": "workday",
+     "config": {"host": "salesforce.wd12.myworkdayjobs.com",
+                "tenant": "salesforce", "site": "External_Career_Site",
+                "search": "software engineer"}},
     {"name": "NVIDIA", "adapter": "workday",
      "config": {"host": "nvidia.wd5.myworkdayjobs.com",
                 "tenant": "nvidia", "site": "NVIDIAExternalCareerSite",
@@ -46,11 +86,13 @@ COMPANIES = [
     # core Bloomberg LP roles live on Avature/careers.bloomberg.com (no JSON
     # API). The INDG board still surfaces engineering new-grad roles.
 
-    # --- Not included ---
-    # Microsoft: migrated to apply.careers.microsoft.com on Eightfold, but its
-    #   public job API returns 403 (auth-gated). Old gcsservices/widgets
-    #   endpoints are dead (404/302). No clean unauthenticated JSON -> dropped.
-    # Uber: custom API, not Lever — needs a dedicated adapter.
-    # Meta, Apple, Google: JS-rendered behind protected APIs that block plain
-    #   HTTP. Out of scope for the no-server design.
+    # --- Not included (no clean public JSON API found) ---
+    # Microsoft: Eightfold, public API 403 (auth-gated); old endpoints dead.
+    # Meta, Apple, Google: JS-rendered behind protected APIs, block plain HTTP.
+    # Uber: custom API, not Lever — would need a dedicated adapter.
+    # Tesla, Salesforce(non-eng): Workday tenants returned 422 on guessed sites.
+    # Snap, ByteDance, Plaid, LinkedIn, Codeium, Blackstone, GitHub, Oracle,
+    #   Atlassian, HashiCorp, X/Twitter: no Greenhouse/Lever/Ashby board at the
+    #   obvious token, or gated. To add later: open the careers page, find the
+    #   ATS API call in devtools, drop a config line above.
 ]

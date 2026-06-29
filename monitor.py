@@ -56,7 +56,11 @@ def main():
         prior = set(seen.get(name, []))
         fresh_ids = set(matched) - prior
 
-        if not first_run:
+        # Seed silently on the first run AND the first time a newly-added
+        # company appears — otherwise adding a company blasts its whole
+        # backlog as "new".
+        company_first_seen = name not in seen
+        if not first_run and not company_first_seen:
             for jid in fresh_ids:
                 j = matched[jid]
                 new_jobs.append({"company": name, **j})
