@@ -1,15 +1,17 @@
-"""Send the new-jobs digest via Outlook SMTP. Reads creds from env:
+"""Send the new-jobs digest via Gmail SMTP. Reads creds from env:
 
-    SMTP_USER  - ian_job_alerts@outlook.com (also the To: address)
-    SMTP_PASS  - an Outlook app password (not your login password)
-    SMTP_TO    - optional override for recipient (defaults to SMTP_USER)
+    SMTP_USER  - Gmail address to send FROM (e.g. your.name@gmail.com)
+    SMTP_PASS  - Gmail app password (not your login password)
+    SMTP_TO    - where to send alerts (defaults to SMTP_USER)
+
+To: ian_job_alerts@outlook.com? Set SMTP_TO in repo secrets.
 """
 
 import os
 import smtplib
 from email.message import EmailMessage
 
-SMTP_HOST = "smtp-mail.outlook.com"
+SMTP_HOST = "smtp.gmail.com"
 SMTP_PORT = 587
 
 
