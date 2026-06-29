@@ -55,6 +55,7 @@ COMPANIES = [
     # --- Ashby (verified live) ---
     {"name": "Notion", "adapter": "ashby", "config": {"org": "Notion"}},
     {"name": "OpenAI", "adapter": "ashby", "config": {"org": "openai"}},
+    {"name": "Plaid", "adapter": "ashby", "config": {"org": "plaid"}},
 
     # --- Workday (verified live) ---
     {"name": "PayPal", "adapter": "workday",
@@ -88,11 +89,13 @@ COMPANIES = [
 
     # --- Not included (no clean public JSON API found) ---
     # Microsoft: Eightfold, public API 403 (auth-gated); old endpoints dead.
-    # Meta, Apple, Google: JS-rendered behind protected APIs, block plain HTTP.
+    # Meta, Apple, Google: /api/v1/search requires Apple ID login (401); Google/Meta
+    #   fully JS-rendered behind protected APIs.
     # Uber: custom API, not Lever — would need a dedicated adapter.
     # Tesla, Salesforce(non-eng): Workday tenants returned 422 on guessed sites.
-    # Snap, ByteDance, Plaid, LinkedIn, Codeium, Blackstone, GitHub, Oracle,
-    #   Atlassian, HashiCorp, X/Twitter: no Greenhouse/Lever/Ashby board at the
-    #   obvious token, or gated. To add later: open the careers page, find the
-    #   ATS API call in devtools, drop a config line above.
+    # ByteDance, LinkedIn, Oracle, Blackstone: proprietary or Taleo ATS, no public JSON.
+    # GitHub, Snap, Atlassian, HashiCorp, X/Twitter, Codeium: no Greenhouse/Lever/Ashby
+    #   board at obvious tokens (all 404). HashiCorp acquired by IBM 2024; Codeium
+    #   acquired by Google 2025 — boards likely dead. To add others: open careers page,
+    #   find the ATS XHR in devtools, drop a config line above.
 ]
