@@ -1,19 +1,53 @@
 {
+  "Adobe": [],
+  "Affirm": [
+    "7485068003"
+  ],
   "Airbnb": [],
   "Amazon": [],
+  "Asana": [],
+  "Block": [],
   "Bloomberg": [],
   "Brex": [],
+  "Cloudflare": [],
   "Coinbase": [],
+  "Coupang": [],
   "Databricks": [],
+  "Datadog": [
+    "7646452"
+  ],
+  "Discord": [],
+  "DoorDash": [],
   "Dropbox": [],
   "Figma": [],
+  "Lyft": [],
   "NVIDIA": [],
   "Netflix": [],
+  "Notion": [
+    "7e6dc7fe-7ddd-42c1-8928-13f7bddb9ec9",
+    "a6311f97-4850-4674-a5f3-d9fe5f6f2555"
+  ],
+  "OpenAI": [],
+  "Palantir": [
+    "95e0d2b0-437a-4096-a5c6-0f247f426c90",
+    "cbe90327-3e6e-451c-a54c-1d3cbcef5aeb",
+    "d1ac83d0-e923-42a5-8e6d-58dd0cab25ca",
+    "fbca0358-083a-4222-bdbb-3bd729b48382"
+  ],
+  "PayPal": [],
   "Pinterest": [],
+  "Plaid": [],
   "Ramp": [],
   "Reddit": [],
   "Robinhood": [],
+  "Roblox": [],
+  "Salesforce": [],
+  "Spotify": [],
   "Stripe": [
-    "7176977"
-  ]
+    "7176977",
+    "7991718"
+  ],
+  "The Trade Desk": [],
+  "Twitch": [],
+  "eBay": []
 }
