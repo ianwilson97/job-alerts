@@ -180,6 +180,140 @@ def workday(cfg):
     return out
 
 
+def apple(cfg):
+    """cfg: {"query": "new grad software engineer"} -> jobs.apple.com (Playwright)
+
+    Paginates URL-based (?page=N) until a page returns 0 job links.
+    Caps at 10 pages (200 jobs) so CI doesn't hang on broad queries.
+    """
+    try:
+        from playwright.sync_api import sync_playwright
+    except ImportError:
+        raise RuntimeError(
+            "playwright not installed; run: pip install playwright && "
+            "python -m playwright install chromium"
+        )
+    from urllib.parse import quote as _quote
+
+    query = cfg.get("query", "new grad software engineer")
+    out = []
+
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        ctx = browser.new_context(
+            user_agent=(
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            ),
+            viewport={"width": 1280, "height": 900},
+            locale="en-US",
+        )
+        page = ctx.new_page()
+
+        for page_num in range(1, 11):
+            page.goto(
+                f"https://jobs.apple.com/en-us/search?sort=newest&page={page_num}"
+                f"&key={_quote(query)}",
+                timeout=30000,
+                wait_until="domcontentloaded",
+            )
+            page.wait_for_timeout(7000)
+
+            jobs = page.evaluate("""() => {
+                const seen = new Set();
+                const result = [];
+                document.querySelectorAll('a[href*="/en-us/details/"]').forEach(a => {
+                    const m = a.href.match(/details[/]([0-9]+)/);
+                    if (!m || seen.has(m[1])) return;
+                    seen.add(m[1]);
+                    const card = a.closest('[class*="accordion"]') || a.parentElement;
+                    const text = card ? card.innerText : '';
+                    const loc = text.match(/Location\\n([^\\n]+)/);
+                    result.push({
+                        id: m[1],
+                        title: a.innerText.trim(),
+                        url: 'https://jobs.apple.com/en-us/details/' + m[1],
+                        location: loc ? loc[1].trim() : '',
+                    });
+                });
+                return result;
+            }""")
+
+            if not jobs:
+                break
+            out.extend(jobs)
+
+        browser.close()
+
+    return out
+
+
+def meta(cfg):
+    """cfg: {"query": "software engineer new grad"} -> metacareers.com (Playwright)
+
+    Note: metacareers.com 429s aggressively from the same IP. In CI (fresh IP each
+    run) this usually succeeds. If it fails, monitor.py logs a warning and skips.
+    """
+    try:
+        from playwright.sync_api import sync_playwright
+    except ImportError:
+        raise RuntimeError(
+            "playwright not installed; run: pip install playwright && "
+            "python -m playwright install chromium"
+        )
+    from urllib.parse import quote as _quote
+
+    query = cfg.get("query", "software engineer new grad")
+
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        ctx = browser.new_context(
+            user_agent=(
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            ),
+            viewport={"width": 1280, "height": 900},
+            locale="en-US",
+        )
+        page = ctx.new_page()
+        page.goto(
+            f"https://www.metacareers.com/jobs?q={_quote(query)}",
+            timeout=30000,
+            wait_until="load",
+        )
+        page.wait_for_timeout(10000)
+
+        body_len, jobs = page.evaluate("""() => {
+            const seen = new Set();
+            const result = [];
+            document.querySelectorAll('a[href]').forEach(a => {
+                const m = a.href.match(/metacareers\\.com[/]jobs[/]([0-9]+)/);
+                if (!m || seen.has(m[1])) return;
+                seen.add(m[1]);
+                const lines = a.innerText.trim().split('\\n')
+                    .map(l => l.trim()).filter(Boolean);
+                result.push({
+                    id: m[1],
+                    title: lines[0] || '',
+                    url: 'https://www.metacareers.com/jobs/' + m[1] + '/',
+                    location: lines.slice(1).join(', '),
+                });
+            });
+            return [document.body ? document.body.innerHTML.length : 0, result];
+        }""")
+
+        browser.close()
+
+    # Empty results on a real page load = scraper broken or rate-limited.
+    # Raise so monitor.py logs WARN and preserves prior seen state.
+    if not jobs and body_len < 5000:
+        raise RuntimeError(f"Meta: page body too short ({body_len} bytes) — likely 429 or block")
+    if not jobs and body_len >= 5000:
+        raise RuntimeError("Meta: page loaded but no job links found — selector may be stale")
+
+    return jobs
+
+
 # Registry: name -> fetcher function. companies.py references these by name.
 ADAPTERS = {
     "greenhouse": greenhouse,
@@ -188,6 +322,8 @@ ADAPTERS = {
     "amazon": amazon,
     "eightfold": eightfold,
     "workday": workday,
+    "apple": apple,
+    "meta": meta,
 }
 
 

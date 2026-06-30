@@ -87,6 +87,12 @@ COMPANIES = [
     # core Bloomberg LP roles live on Avature/careers.bloomberg.com (no JSON
     # API). The INDG board still surfaces engineering new-grad roles.
 
+    # --- Playwright (headless browser; slower, ~30s each) ---
+    {"name": "Apple", "adapter": "apple",
+     "config": {"query": "new grad software engineer"}},
+    {"name": "Meta", "adapter": "meta",
+     "config": {"query": "software engineer new grad"}},
+
     # --- Not included (no clean public JSON API found) ---
     # Microsoft: Eightfold, public API 403 (auth-gated); old endpoints dead.
     # Meta, Apple, Google: /api/v1/search requires Apple ID login (401); Google/Meta
