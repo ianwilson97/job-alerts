@@ -23,7 +23,7 @@ monitor.py → adapters.py (per-ATS fetch / Playwright) → filter.py (title mat
 
 1. Fork this repo (or clone it into a new repo of your own) — GitHub Actions
    only runs under a repo you control.
-2. Get a Gmail **app password**[[https://myaccount.google.com/apppasswords]] for the account you want alerts sent
+2. Get a Gmail [**app password**](https://myaccount.google.com/apppasswords) for the account you want alerts sent
    from (not your login password):
    Google Account → Security → 2-Step Verification → App passwords.
 3. On your repo → Settings → Secrets and variables → Actions → add:
