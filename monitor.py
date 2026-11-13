@@ -72,7 +72,10 @@ def main():
     save_seen(updated)
 
     if new_jobs:
-        send_email(new_jobs)
+        try:
+            send_email(new_jobs)
+        except Exception as e:
+            print(f"WARN: email send failed ({e}); seen.json still updated")
     elif not first_run:
         print("No new jobs.")
 
